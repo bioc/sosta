@@ -22,12 +22,22 @@ vignette: >
 bibliography: sosta.bib
 ---
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>"
 )
+```
+
+# Installation
+
+`r BiocStyle::Biocpkg('sosta')` can be loaded from Bioconductor and installed as follows
+
+```{r installation, include = TRUE, eval=FALSE}
+if (!requireNamespace("BiocManager")) {
+    install.packages("BiocManager")
+}
+BiocManager::install("sosta")
 ```
 
 # Setup
