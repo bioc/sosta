@@ -28,7 +28,7 @@ Estimate the intensity threshold for the reconstruction of spatial strucutres
 \examples{
 spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
 pp <- SPE2ppp(spe, marks = "cell_category", image_col = "image_name", image_id = "E04")
-pp_sel <- subset(pp, marks == "islet")
+pp_sel <- spatstat.geom::subset.ppp(pp, marks == "islet")
 dimyx <- getDimXY(pp_sel, 500)
 findIntensityThreshold(pp_sel, dimyx = dimyx)
 }

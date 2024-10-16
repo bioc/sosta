@@ -11,7 +11,7 @@
 #'
 #' @return sf object of class `POLYGON`
 #' @importFrom spatstat.explore density.ppp
-#' @importFrom sf st_cast st_make_valid st_sf
+#' @importFrom sf st_cast st_make_valid st_sf st_is_empty
 #' @export
 #'
 #' @examples
@@ -115,15 +115,15 @@ shapeIntensityImage <- function(
 
     # plot histogram
     den_hist <- im_df |>
-        dplyr::filter(.data$value > max(.data$value) / 250) |>
+        filter(.data$value > max(.data$value) / 250) |>
         ggplot(aes(x = abs(.data$value))) + # Use .data pronoun
         geom_histogram(bins = 50) +
         labs(x = "pixel intensity") +
         theme_light()
 
 
-    p <- patchwork::wrap_plots(den_im, den_hist, ncol = 2) +
-        patchwork::plot_annotation(
+    p <- wrap_plots(den_im, den_hist, ncol = 2) +
+        plot_annotation(
             title = paste0(image_col, ": ", image_id),
             subtitle = paste0("bndw: ", round(bndw, 4)),
             caption = paste0("Pixel image dimensions: ", dimyx[1], "x", dimyx[2])
@@ -302,7 +302,7 @@ estimateReconstructionParametersSPE <- function(
     # alternitavely we sample some images
     sample_images <- sample(all_images, nimages)
     # we calculate the bandwiths and thresholds
-    res <- parallel::mclapply(sample_images, function(x) {
+    res <- mclapply(sample_images, function(x) {
         pp <- SPE2ppp(spe, marks = marks, image_col = image_col, image_id = x)
         # If selection of mark
         if (!is.null(mark_select)) pp <- subset.ppp(pp, marks %in% mark_select)
@@ -330,7 +330,7 @@ estimateReconstructionParametersSPE <- function(
             geom_histogram(bins = round(nimages / 2)) +
             theme_light()
 
-        plot(patchwork::wrap_plots(p1, p2, ncol = 2))
+        plot(wrap_plots(p1, p2, ncol = 2))
     }
 
     return(res)

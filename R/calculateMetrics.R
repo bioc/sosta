@@ -67,7 +67,7 @@ shapeMetrics <- function(sfPoly) {
 #' @param sfInput `MULTIPOLYGON` of class sf
 #'
 #' @return matrix; matrix of shape metrics
-#' @importFrom sf st_cast st_geometry
+#' @importFrom sf st_cast st_geometry st_sfc
 #' @export
 #'
 #' @examples

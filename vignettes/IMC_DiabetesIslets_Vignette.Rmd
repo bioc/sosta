@@ -141,7 +141,6 @@ plotSpots(
     sample_id = "image_number",
     in_tissue = NULL,
     y_reverse = FALSE,
-    point_size = 0.75
 ) +
     geom_sf(
         data = islet,
@@ -173,7 +172,6 @@ plotSpots(
     sample_id = "image_number",
     in_tissue = NULL,
     y_reverse = FALSE,
-    point_size = 0.75
 ) +
     geom_sf(
         data = islet_2,

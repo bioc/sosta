@@ -26,7 +26,7 @@ to a valid \code{sf} object (polygons).
 \examples{
 spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
 pp <- SPE2ppp(spe, marks = "cell_category", image_col = "image_name", image_id = "E04")
-pp_sel <- subset(pp, marks == "islet")
+pp_sel <- spatstat.geom::subset.ppp(pp, marks == "islet")
 bndw <- spatstat.explore::bw.diggle(pp_sel)
 dimyx <- getDimXY(pp_sel, 500)
 thres <- findIntensityThreshold(pp_sel, bndw = bndw, dimyx = dimyx)

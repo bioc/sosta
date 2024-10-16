@@ -142,7 +142,7 @@ getDimXY <- function(ppp, ydim) {
 #' @export
 #' @importFrom SpatialExperiment spatialCoords
 #' @importFrom SummarizedExperiment colData
-#' @importFrom spatstat.geom as.ppp
+#' @importFrom spatstat.geom as.ppp setmarks
 #'
 #' @examples
 #' spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
@@ -164,7 +164,7 @@ SPE2ppp <- function(
             max(spatialCoords(spe)[, 2])
         )
     )
-    marks(ppp) <- colData(spe)[[marks]]
+    ppp <- setmarks(ppp, colData(spe)[[marks]])
     return(ppp)
 }
 
@@ -183,12 +183,13 @@ SPE2ppp <- function(
 #' @return numeric; estimated intensity threshold
 #' @importFrom spatstat.explore bw.diggle density.ppp
 #' @importFrom spatstat.geom subset.ppp
+#' @importFrom stats density
 #' @export
 #'
 #' @examples
 #' spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
 #' pp <- SPE2ppp(spe, marks = "cell_category", image_col = "image_name", image_id = "E04")
-#' pp_sel <- subset.ppp(pp, marks == "islet")
+#' pp_sel <- spatstat.geom::subset.ppp(pp, marks == "islet")
 #' dimyx <- getDimXY(pp_sel, 500)
 #' findIntensityThreshold(pp_sel, dimyx = dimyx)
 findIntensityThreshold <- function(
