@@ -4,7 +4,7 @@
 #'
 #' @return list; list of shape metrics
 #'
-#' @import sf
+#' @importFrom sf st_area st_length st_convex_hull st_boundary
 #' @export
 #'
 #' @examples
@@ -67,7 +67,7 @@ shapeMetrics <- function(sfPoly) {
 #' @param sfInput `MULTIPOLYGON` of class sf
 #'
 #' @return matrix; matrix of shape metrics
-#' @import sf
+#' @importFrom sf st_cast st_geometry
 #' @export
 #'
 #' @examples

@@ -7,8 +7,8 @@
 #' @param ymax integer; maximum y coordinate of the coordinate system
 #'
 #' @return sf object
-#' @import sf
-#' @importFrom terra rast as.polygons ext
+#' @importFrom sf st_as_sf st_union
+#' @importFrom terra rast as.polygons set.ext
 #' @export
 #'
 #' @examples
@@ -33,10 +33,7 @@ binaryImageToSF <- function(binaryMatrix,
     # get raster
     r <- rast(binaryMatrix)
     # rescale to correct windwow
-    terra::ext(r) <- c(
-        xmin, xmax,
-        ymin, ymax
-    )
+    set.ext(r, c(xmin, xmax, ymin, ymax))
     # convert to polygons
     poly <- as.polygons(r)
     # polygons is a SpatVector. Convert it to an sf object
@@ -143,7 +140,9 @@ getDimXY <- function(ppp, ydim) {
 #'
 #' @return ppp; object of type `ppp`
 #' @export
-#' @import SpatialExperiment
+#' @importFrom SpatialExperiment spatialCoords
+#' @importFrom SummarizedExperiment colData
+#' @importFrom spatstat.geom as.ppp
 #'
 #' @examples
 #' spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
@@ -182,14 +181,14 @@ SPE2ppp <- function(
 #' Default is 250.
 #'
 #' @return numeric; estimated intensity threshold
-#' @import spatstat.explore
-#' @importFrom stats denstiy
+#' @importFrom spatstat.explore bw.diggle density.ppp
+#' @importFrom spatstat.geom subset.ppp
 #' @export
 #'
 #' @examples
 #' spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
 #' pp <- SPE2ppp(spe, marks = "cell_category", image_col = "image_name", image_id = "E04")
-#' pp_sel <- subset(pp, marks == "islet")
+#' pp_sel <- subset.ppp(pp, marks == "islet")
 #' dimyx <- getDimXY(pp_sel, 500)
 #' findIntensityThreshold(pp_sel, dimyx = dimyx)
 findIntensityThreshold <- function(
@@ -198,7 +197,7 @@ findIntensityThreshold <- function(
     # define default of the sigma threshold
     if (is.null(bndw)) bndw <- bw.diggle(ppp)
     # create data frame
-    den_df <- as.data.frame(density(ppp,
+    den_df <- as.data.frame(density.ppp(ppp,
         sigma = bndw,
         dimyx = dimyx,
         positive = TRUE
@@ -210,9 +209,7 @@ findIntensityThreshold <- function(
     peaks <- new_den$x[which(diff(sign(diff(new_den$y))) == -2)]
     # define peak values
     peak_vals <- new_den$y[which(diff(sign(diff(new_den$y))) == -2)]
-    # for simplicity the threshold is the mean between the highest and second
-    # highest peak
-    # TODO: this could be improved
+    # the threshold is the mean between the two main modes of the distribution
     if (length(peaks) == 1) {
         thres <- peaks
     } else {
