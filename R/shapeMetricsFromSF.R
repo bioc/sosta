@@ -21,6 +21,10 @@
 #' poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
 #' st_feature_axes(poly_R)
 st_feature_axes <- function(sfPoly) {
+    # Input checks
+    stopifnot("'sfPoly' must be a valid sfc object" = inherits(sfPoly, "sfc"))
+    stopifnot("'sfPoly' must be of type POLYGON" = st_geometry_type(sfPoly) == "POLYGON")
+
     minRect <- st_minimum_rotated_rectangle(sfPoly)
     coords <- st_coordinates(minRect)[, c("X", "Y")]
 
@@ -61,6 +65,10 @@ st_feature_axes <- function(sfPoly) {
 #' poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
 #' st_calculateCurvature(poly_R)
 st_calculateCurvature <- function(sfPoly, smoothness = 5) {
+    # Input checks
+    stopifnot("'sfPoly' must be a valid sfc object" = inherits(sfPoly, "sfc"))
+    stopifnot("'sfPoly' must be of type POLYGON" = st_geometry_type(sfPoly) == "POLYGON")
+
     # Smooth the data using concave hull and ksmooth method
     smooth_poly <- smooth(st_boundary(sfPoly),
         method = "ksmooth",
@@ -123,6 +131,9 @@ st_calculateCurvature <- function(sfPoly, smoothness = 5) {
 #' poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
 #' st_calculateShapeCurl(poly_R)
 st_calculateShapeCurl <- function(sfPoly) {
+    # Input checks
+    stopifnot("'sfPoly' must be a valid sfc object" = inherits(sfPoly, "sfc"))
+    stopifnot("'sfPoly' must be of type POLYGON" = st_geometry_type(sfPoly) == "POLYGON")
     # Major axis length
     length <- st_feature_axes(sfPoly)$majorAxisLength
     # Calculate perimeter

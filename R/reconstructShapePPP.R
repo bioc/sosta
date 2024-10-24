@@ -23,10 +23,14 @@
 #' plot(islet_poly)
 reconstructShapeDensity <- function(ppp, mark_select = NULL,
                                     bndw = NULL, thres = NULL, dim) {
-    # estimate density
-    #density_image <- density.ppp(ppp, bndw, dimyx = c(dimyx), positive = TRUE)
 
+    # estimate density
     res <- .intensityImage(ppp, mark_select, bndw, dim)
+
+    if (!is.null(thres)) {
+        stopifnot("'thres' must be a single numeric value" = is.numeric(thres) &&
+                      length(thres) == 1)
+    }
 
     # Check if intensity threshold exists
     if (is.null(thres)) {
@@ -35,6 +39,10 @@ reconstructShapeDensity <- function(ppp, mark_select = NULL,
 
     # construct spatstat window from matrix with true false entries
     mat <- ifelse(t(as.matrix(res$den_im)) > thres, TRUE, FALSE)
+
+    # Check if we get empty or full polygon
+    stopifnot("Threshold too low" = (!all(mat == 1)))
+    stopifnot("Threshold too high" = (!all(mat == 0)))
 
     # using custom function
     stCast <- st_cast(
@@ -271,6 +279,15 @@ estimateReconstructionParametersSPE <- function(
         dim = 500,
         ncores = 1,
         plot_hist = TRUE) {
+
+    # Input checks
+    if (!is.null(nimages)) {
+        print(length(unique(colData(spe)[[image_col]])))
+        stopifnot("'nimages' must be numeric" = is.numeric(nimages))
+        stopifnot("'nimages' must be smaller or equal to the number of images in the `SpatialExperiment`" =
+                      (nimages < length(unique(colData(spe)[[image_col]]))))
+    }
+
     # get the id's of all images
     all_images <- colData(spe)[[image_col]] |> unique()
     # default is to take all values

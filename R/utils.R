@@ -249,12 +249,17 @@ findIntensityThreshold <- function(
     stopifnot("'ppp' must be an object of class 'ppp'" = inherits(ppp, "ppp"))
     stopifnot("'dim' must be a single numeric value" = is.numeric(dim) && length(dim) == 1)
 
+    if (!is.null(bndw)) {
+        stopifnot("'bndw' must be a single numeric value" = is.numeric(bndw) && length(bndw) == 1)
+    }
+
     # Extract the islet cells
     if (!is.null(mark_select)) {
         stopifnot("All values in 'mark_select' must exist in 'marks' of 'ppp'" =
                       all(mark_select %in% marks(ppp)))
         pp_sel <- subset.ppp(ppp, marks %in% mark_select)
     } else pp_sel <- ppp
+
 
     # Set the dimensions of the resulting reconstruction
     dimyx <- getDimXY(pp_sel, dim)
