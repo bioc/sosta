@@ -52,8 +52,8 @@ Estimate reconstruction parameters from a set of images
 }
 \examples{
 spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
-spe <- spe[, spe[["image_name"]] \%in\% c("E02", "E03", "E04")]
-estimateReconstructionParametersSPE(spe,
+spe_sel <- spe[, spe[["image_name"]] \%in\% c("E02", "E03", "E04")]
+estimateReconstructionParametersSPE(spe_sel,
     marks = "cell_category",
     image_col = "image_name", mark_select = "islet", plot_hist = TRUE
 )

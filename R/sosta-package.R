@@ -9,6 +9,7 @@
 #' @importFrom ggplot2 coord_equal
 #' @importFrom ggplot2 geom_histogram
 #' @importFrom ggplot2 geom_tile
+#' @importFrom ggplot2 geom_vline
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 scale_color_viridis_c

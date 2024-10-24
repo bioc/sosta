@@ -7,7 +7,7 @@
 shapeMetrics(sfPoly)
 }
 \arguments{
-\item{sfPoly}{POLYGON of class sf}
+\item{sfPoly}{POLYGON of class sfc}
 }
 \value{
 list; list of shape metrics

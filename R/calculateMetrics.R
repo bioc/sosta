@@ -1,10 +1,10 @@
 #' Calculate a set of shape metrics of a polygon
 #'
-#' @param sfPoly POLYGON of class sf
+#' @param sfPoly POLYGON of class sfc
 #'
 #' @return list; list of shape metrics
 #'
-#' @importFrom sf st_area st_length st_convex_hull st_boundary
+#' @importFrom sf st_area st_length st_convex_hull st_boundary st_geometry_type
 #' @export
 #'
 #' @examples
@@ -22,6 +22,11 @@
 #' poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
 #' shapeMetrics(poly_R)
 shapeMetrics <- function(sfPoly) {
+
+    # Input checks
+    stopifnot("'sfPoly' must be a valid sfc object" = inherits(sfPoly, "sfc"))
+    stopifnot("'sfPoly' must be of type POLYGON" = st_geometry_type(sfPoly) == "POLYGON")
+
     # Area
     shapeArea <- st_area(sfPoly)
     # Perimeter
