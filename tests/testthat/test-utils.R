@@ -51,8 +51,10 @@ test_that("normalizeCoordinates scales values correctly", {
 })
 
 test_that("getDimXY calculates dimensions based on y-axis", {
-    ppp <- spatstat.geom::ppp(x = runif(100, 0, 1), y = runif(100, 0, 1),
-                              window = spatstat.geom::owin(c(0, 2), c(0, 2)))
+    ppp <- spatstat.geom::ppp(
+        x = runif(100, 0, 1), y = runif(100, 0, 1),
+        window = spatstat.geom::owin(c(0, 2), c(0, 2))
+    )
     ydim <- 500
     dimyx <- getDimXY(ppp, ydim)
     expect_equal(length(dimyx), 2)
@@ -60,16 +62,20 @@ test_that("getDimXY calculates dimensions based on y-axis", {
 })
 
 test_that("findIntensityThreshold calculates threshold correctly", {
-    ppp <- spatstat.geom::ppp(x = runif(100, 0, 1), y = runif(100, 0, 1),
-               window = spatstat.geom::owin(c(0, 2), c(0, 2)))
+    ppp <- spatstat.geom::ppp(
+        x = runif(100, 0, 1), y = runif(100, 0, 1),
+        window = spatstat.geom::owin(c(0, 2), c(0, 2))
+    )
     threshold <- findIntensityThreshold(ppp, mark_select = NULL, dim = 100)
     expect_true(is.numeric(threshold))
 })
 
 test_that(".intensityImage generates density image correctly", {
     # Create a sample ppp object
-    ppp <- spatstat.geom::ppp(x = runif(100, 0, 1), y = runif(100, 0, 1),
-               window = spatstat.geom::owin(c(0, 1), c(0, 1)))
+    ppp <- spatstat.geom::ppp(
+        x = runif(100, 0, 1), y = runif(100, 0, 1),
+        window = spatstat.geom::owin(c(0, 1), c(0, 1))
+    )
 
     # Test with and without a specified bandwidth
     dim <- 100
@@ -93,8 +99,10 @@ test_that(".intensityImage generates density image correctly", {
 
 test_that(".intensityThreshold calculates a threshold based on density image", {
     # Mock a simple density image object using spatstat
-    ppp <- spatstat.geom::ppp(x = runif(100, 0, 1), y = runif(100, 0, 1),
-               window = spatstat.geom::owin(c(0, 1), c(0, 1)))
+    ppp <- spatstat.geom::ppp(
+        x = runif(100, 0, 1), y = runif(100, 0, 1),
+        window = spatstat.geom::owin(c(0, 1), c(0, 1))
+    )
 
     density_image <- density.ppp(ppp)
 
@@ -106,4 +114,3 @@ test_that(".intensityThreshold calculates a threshold based on density image", {
     expect_true(threshold >= min(density_image$v))
     expect_true(threshold <= max(density_image$v))
 })
-

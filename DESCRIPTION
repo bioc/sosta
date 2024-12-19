@@ -32,7 +32,8 @@ Imports:
     patchwork,
     SummarizedExperiment,
     stats,
-    rlang
+    rlang,
+    parallel
 Suggests:
     knitr,
     rmarkdown,

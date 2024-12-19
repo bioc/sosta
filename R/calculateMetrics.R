@@ -92,7 +92,7 @@ totalShapeMetrics <- function(sfInput) {
         shapeStruct <- vapply(
             st_geometry(cast_sf),
             function(x) unlist(shapeMetrics(st_sfc(x))),
-            numeric(8) #length of metrics
+            numeric(8) # length of metrics
         )
     } else {
         shapeStruct <- t(data.frame(shapeMetrics(cast_sf)))

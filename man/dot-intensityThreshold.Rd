@@ -13,6 +13,9 @@
 densities greater than the maximum value divided by \code{threshold} are considered.
 Default is 250.}
 }
+\value{
+numeric; estimated threshold
+}
 \description{
 Function to estimate the intensity threshold for the reconstruction of spatial strucutres
 }

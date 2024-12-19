@@ -78,4 +78,3 @@ test_that("meanShapeMetrics throws an error for invalid input", {
 
     expect_error(meanShapeMetrics(invalid_input), "'totalShapeMetricMatrix' must be a matrix")
 })
-

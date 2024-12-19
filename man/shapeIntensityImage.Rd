@@ -2,7 +2,7 @@
 % Please edit documentation in R/reconstructShapePPP.R
 \name{shapeIntensityImage}
 \alias{shapeIntensityImage}
-\title{Get intensity plot and intensity from spe object with given image id}
+\title{Intensity plot}
 \usage{
 shapeIntensityImage(
   spe,
@@ -39,7 +39,9 @@ speeds up computation but lead to less exact reconstruction. Default = 500}
 ggplot object with intensity image and histogram
 }
 \description{
-Get intensity plot and intensity from spe object with given image id
+This function plots the intensity of a point pattern image and displays
+a histogram of the intensity values. Note that intensities less than
+largest intensity value divided by 250 are not displayed in the histogram.
 }
 \examples{
 spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)

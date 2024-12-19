@@ -1,10 +1,10 @@
 test_that("st_feature_axes computes major and minor axis lengths correctly", {
     # Create a simple polygon
     matrix_R <- matrix(c(
-        0,1,1,0,
-        0,1,1,0,
-        0,1,1,0,
-        0,1,1,0
+        0, 1, 1, 0,
+        0, 1, 1, 0,
+        0, 1, 1, 0,
+        0, 1, 1, 0
     ), nrow = 4, byrow = TRUE)
 
     poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
@@ -16,7 +16,6 @@ test_that("st_feature_axes computes major and minor axis lengths correctly", {
     expect_named(axes, c("majorAxisLength", "minorAxisLength"))
     expect_equal(axes$majorAxisLength, 1)
     expect_equal(axes$minorAxisLength, 0.5)
-
 })
 
 test_that("st_calculateCurvature computes curvature metrics correctly", {

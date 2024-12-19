@@ -16,6 +16,9 @@ reconstruction}
 
 \item{dim}{numeric; x dimension of the final reconstruction.}
 }
+\value{
+list; list with the intensity image and the bandwidth and dimension parameters
+}
 \description{
 Function to estimate the intensity image of a point pattern
 }

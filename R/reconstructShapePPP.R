@@ -22,14 +22,13 @@
 #' islet_poly <- reconstructShapeDensity(ppp, mark_select = "islet", thres = thres, dim = 500)
 #' plot(islet_poly)
 reconstructShapeDensity <- function(ppp, mark_select = NULL,
-                                    bndw = NULL, thres = NULL, dim) {
-
+    bndw = NULL, thres = NULL, dim) {
     # estimate density
     res <- .intensityImage(ppp, mark_select, bndw, dim)
 
     if (!is.null(thres)) {
         stopifnot("'thres' must be a single numeric value" = is.numeric(thres) &&
-                      length(thres) == 1)
+            length(thres) == 1)
     }
 
     # Check if intensity threshold exists
@@ -62,7 +61,11 @@ reconstructShapeDensity <- function(ppp, mark_select = NULL,
 }
 
 
-#' Get intensity plot and intensity from spe object with given image id
+#' Intensity plot
+#'
+#' This function plots the intensity of a point pattern image and displays
+#' a histogram of the intensity values. Note that intensities less than
+#' largest intensity value divided by 250 are not displayed in the histogram.
 #'
 #' @param spe SpatialExperiment; a object of class `SpatialExperiment`
 #' @param marks character; name of column in `colData` that will correspond to
@@ -92,13 +95,12 @@ reconstructShapeDensity <- function(ppp, mark_select = NULL,
 #'     marks = "cell_category", image_col = "image_name",
 #'     image_id = "E04", mark_select = "islet"
 #' )
-shapeIntensityImage <- function(
-        spe, marks,
-        image_col,
-        image_id,
-        mark_select,
-        bndw = NULL,
-        dim = 500) {
+shapeIntensityImage <- function(spe, marks,
+    image_col,
+    image_id,
+    mark_select,
+    bndw = NULL,
+    dim = 500) {
     # Convert the spe object to a point pattern object
     ppp <- SPE2ppp(spe, marks = marks, image_col = image_col, image_id = image_id)
 
@@ -129,10 +131,14 @@ shapeIntensityImage <- function(
     p <- wrap_plots(den_im, den_hist, ncol = 2) +
         plot_annotation(
             title = paste0(image_col, ": ", image_id),
-            subtitle = paste0("bndw: ", round(res$bndw, 4), "; estimated thres: ",
-                              round(thres, 4)),
-            caption = paste0("Pixel image dimensions: ", res$dimyx[1],
-                             "x", res$dimyx[2])
+            subtitle = paste0(
+                "bndw: ", round(res$bndw, 4), "; estimated thres: ",
+                round(thres, 4)
+            ),
+            caption = paste0(
+                "Pixel image dimensions: ", res$dimyx[1],
+                "x", res$dimyx[2]
+            )
         )
 
     return(p)
@@ -162,13 +168,14 @@ shapeIntensityImage <- function(
 #'
 #' @examples
 #' spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
-#' islet_poly <- reconstructShapeDensityImage(spe, marks = "cell_category",
+#' islet_poly <- reconstructShapeDensityImage(spe,
+#'     marks = "cell_category",
 #'     image_col = "image_name", image_id = "E04", mark_select = "islet", dim = 500
 #' )
 #' plot(islet_poly)
-reconstructShapeDensityImage <- function(spe, marks,
-    image_col, image_id, mark_select, dim = 500, bndw = NULL, thres = NULL) {
-
+reconstructShapeDensityImage <- function(
+        spe, marks,
+        image_col, image_id, mark_select, dim = 500, bndw = NULL, thres = NULL) {
     # Convert the spe object to a point pattern object
     ppp <- SPE2ppp(spe, marks, image_col, image_id)
 
@@ -211,10 +218,11 @@ reconstructShapeDensityImage <- function(spe, marks,
 #'     image_col = "image_name", mark_select = "islet", bndw = sigma, thres = 0.0025
 #' )
 #' all_islets
-reconstructShapeDensitySPE <- function(spe, marks,
-    image_col, mark_select,
-    dim = 500, bndw = NULL, thres,
-    ncores = 1) {
+reconstructShapeDensitySPE <- function(
+        spe, marks,
+        image_col, mark_select,
+        dim = 500, bndw = NULL, thres,
+        ncores = 1) {
     # Get all unique image ids
     all_images <- spe[[image_col]] |> unique()
     # Calculate polygon for each id using multiple cores
@@ -270,23 +278,22 @@ reconstructShapeDensitySPE <- function(spe, marks,
 #'     marks = "cell_category",
 #'     image_col = "image_name", mark_select = "islet", plot_hist = TRUE
 #' )
-estimateReconstructionParametersSPE <- function(
-        spe,
-        marks,
-        image_col,
-        mark_select = NULL,
-        nimages = NULL,
-        fun = "bw.diggle",
-        dim = 500,
-        ncores = 1,
-        plot_hist = TRUE) {
-
+estimateReconstructionParametersSPE <- function(spe,
+    marks,
+    image_col,
+    mark_select = NULL,
+    nimages = NULL,
+    fun = "bw.diggle",
+    dim = 500,
+    ncores = 1,
+    plot_hist = TRUE) {
     # Input checks
     if (!is.null(nimages)) {
-        print(length(unique(colData(spe)[[image_col]])))
         stopifnot("'nimages' must be numeric" = is.numeric(nimages))
-        stopifnot("'nimages' must be smaller or equal to the number of images in the `SpatialExperiment`" =
-                      (nimages < length(unique(colData(spe)[[image_col]]))))
+        stopifnot(
+            "'nimages' must be smaller or equal to the number of images in the `SpatialExperiment`" =
+                (nimages < length(unique(colData(spe)[[image_col]])))
+        )
     }
 
     # get the id's of all images
