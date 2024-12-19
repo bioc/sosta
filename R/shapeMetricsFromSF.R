@@ -21,6 +21,10 @@
 #' poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
 #' st_feature_axes(poly_R)
 st_feature_axes <- function(sfPoly) {
+    # Input checks
+    stopifnot("'sfPoly' must be a valid sfc object" = inherits(sfPoly, "sfc"))
+    stopifnot("'sfPoly' must be of type POLYGON" = st_geometry_type(sfPoly) == "POLYGON")
+
     minRect <- st_minimum_rotated_rectangle(sfPoly)
     coords <- st_coordinates(minRect)[, c("X", "Y")]
 
@@ -41,6 +45,8 @@ st_feature_axes <- function(sfPoly) {
 #' @param smoothness list; curvature measures
 #'
 #' @return list; list of curvatures values
+#' @importFrom sf st_boundary st_coordinates
+#' @importFrom smoothr smooth
 #' @export
 #'
 #' @references https://stackoverflow.com/questions/62250151/calculate-curvature-of-a-closed-object-in-r
@@ -59,16 +65,19 @@ st_feature_axes <- function(sfPoly) {
 #' poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
 #' st_calculateCurvature(poly_R)
 st_calculateCurvature <- function(sfPoly, smoothness = 5) {
+    # Input checks
+    stopifnot("'sfPoly' must be a valid sfc object" = inherits(sfPoly, "sfc"))
+    stopifnot("'sfPoly' must be of type POLYGON" = st_geometry_type(sfPoly) == "POLYGON")
+
     # Smooth the data using concave hull and ksmooth method
-    smooth_poly <- smoothr::smooth(sf::st_boundary(sfPoly),
+    smooth_poly <- smooth(st_boundary(sfPoly),
         method = "ksmooth",
         smoothness = smoothness
     )
 
     smooth_poly <- sfPoly
-
     # Convert the smoothed data to a data frame
-    smooth_df <- as.data.frame(sf::st_coordinates(smooth_poly))
+    smooth_df <- as.data.frame(st_coordinates(smooth_poly))
 
     # Calculate the change in x and y per unit length
     dx <- diff(c(smooth_df$X, smooth_df$X[1]))
@@ -105,6 +114,7 @@ st_calculateCurvature <- function(sfPoly, smoothness = 5) {
 #' @param sfPoly `POLYGON ` of class `sf`
 #'
 #' @return numeric; the curl of the polygon
+#' @importFrom sf st_area st_length st_boundary
 #' @export
 #'
 #' @examples
@@ -120,12 +130,15 @@ st_calculateCurvature <- function(sfPoly, smoothness = 5) {
 #' poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
 #' st_calculateShapeCurl(poly_R)
 st_calculateShapeCurl <- function(sfPoly) {
+    # Input checks
+    stopifnot("'sfPoly' must be a valid sfc object" = inherits(sfPoly, "sfc"))
+    stopifnot("'sfPoly' must be of type POLYGON" = st_geometry_type(sfPoly) == "POLYGON")
     # Major axis length
     length <- st_feature_axes(sfPoly)$majorAxisLength
     # Calculate perimeter
-    perimeter <- sf::st_length(sf::st_boundary(sfPoly))
+    perimeter <- st_length(st_boundary(sfPoly))
     # Calculate radicand
-    radicand <- perimeter^2 - 16 * sf::st_area(sfPoly)
+    radicand <- perimeter^2 - 16 * st_area(sfPoly)
     # Check if sqrt of radicand is real
     radicand <- ifelse(radicand > 0, radicand, 0)
     # Calculate fibre length

@@ -1,10 +1,10 @@
 #' Calculate a set of shape metrics of a polygon
 #'
-#' @param sfPoly POLYGON of class sf
+#' @param sfPoly POLYGON of class sfc
 #'
 #' @return list; list of shape metrics
 #'
-#' @import sf
+#' @importFrom sf st_area st_length st_convex_hull st_boundary st_geometry_type
 #' @export
 #'
 #' @examples
@@ -22,6 +22,9 @@
 #' poly_R <- binaryImageToSF(matrix_R, xmin = 0, xmax = 1, ymin = 0, ymax = 1)
 #' shapeMetrics(poly_R)
 shapeMetrics <- function(sfPoly) {
+    # Input checks
+    stopifnot("'sfPoly' must be a valid sfc object" = inherits(sfPoly, "sfc"))
+    stopifnot("'sfPoly' must be of type POLYGON" = st_geometry_type(sfPoly) == "POLYGON")
     # Area
     shapeArea <- st_area(sfPoly)
     # Perimeter
@@ -67,7 +70,7 @@ shapeMetrics <- function(sfPoly) {
 #' @param sfInput `MULTIPOLYGON` of class sf
 #'
 #' @return matrix; matrix of shape metrics
-#' @import sf
+#' @importFrom sf st_cast st_geometry st_sfc st_geometry_type
 #' @export
 #'
 #' @examples
@@ -78,6 +81,10 @@ shapeMetrics <- function(sfPoly) {
 #' )
 #' totalShapeMetrics(islet_poly)
 totalShapeMetrics <- function(sfInput) {
+    # Input checks
+    stopifnot("'sfInput' must be a valid sf object" = inherits(sfInput, "sf"))
+    stopifnot("'sfInput' must be of type MULTIPOLYGON" = all(st_geometry_type(sfInput) == "POLYGON"))
+
     # cast into different objects, i.e the substructures
     cast_sf <- st_cast(st_geometry(sfInput), "POLYGON")
     # calculate tissue metrics on all substructures
@@ -85,7 +92,7 @@ totalShapeMetrics <- function(sfInput) {
         shapeStruct <- vapply(
             st_geometry(cast_sf),
             function(x) unlist(shapeMetrics(st_sfc(x))),
-            numeric(8) #length of metrics
+            numeric(8) # length of metrics
         )
     } else {
         shapeStruct <- t(data.frame(shapeMetrics(cast_sf)))
@@ -116,6 +123,9 @@ totalShapeMetrics <- function(sfInput) {
 #' shape_metrics <- totalShapeMetrics(islet_poly)
 #' meanShapeMetrics(shape_metrics)
 meanShapeMetrics <- function(totalShapeMetricMatrix) {
+    # Check Input
+    stopifnot("'totalShapeMetricMatrix' must be a matrix" = is.matrix(totalShapeMetricMatrix))
+
     meanShapeMat <- rowMeans(totalShapeMetricMatrix)
     meanShapeMat["numberStructures"] <- dim(totalShapeMetricMatrix)[2]
     meanShapeMat["totalArea"] <- sum(totalShapeMetricMatrix["Area", ])

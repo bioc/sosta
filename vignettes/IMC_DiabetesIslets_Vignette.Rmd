@@ -22,12 +22,22 @@ vignette: >
 bibliography: sosta.bib
 ---
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>"
 )
+```
+
+# Installation
+
+`r BiocStyle::Biocpkg('sosta')` can be loaded from Bioconductor and installed as follows
+
+```{r installation, include = TRUE, eval=FALSE}
+if (!requireNamespace("BiocManager")) {
+    install.packages("BiocManager")
+}
+BiocManager::install("sosta")
 ```
 
 # Setup
@@ -37,16 +47,13 @@ library("sosta")
 library("dplyr")
 library("tidyr")
 library("ggplot2")
-library("patchwork")
 library("ggspavis")
-library("spatstat.explore")
-library("spatstat.geom")
 library("imcdatasets")
 ```
 
 # Introduction
 
-In this vignette we will use data from the package `r BiocStyle::Biocpkg('imcdatasets')`. The dataset contains imaging mass cytometry (IMC) data of pancreatic islets of human donors at different stages of type 1 diabetes (T1D) [@damondMapHumanType2019]. Note that we will only use a subset of the images `full_dataset = FALSE`.
+In this vignette we will use data from the package `r BiocStyle::Biocpkg('imcdatasets')`. The dataset contains imaging mass cytometry (IMC) data of pancreatic islets of human donors at different stages of type 1 diabetes (T1D) and healthy controls [@damondMapHumanType2019]. Note that we will only use a subset of the images `full_dataset = FALSE`.
 
 ```{r loading, echo=FALSE, message=FALSE}
 # load the data
@@ -65,15 +72,28 @@ plotSpots(
     y_reverse = FALSE
 ) + facet_wrap(~image_name)
 ```
-The goal is to reconstruct and quantify the pancreatic islets.
+
+The goal is to reconstruct / segment and quantify the pancreatic islets.
 
 # Reconstruction of pancreatic islets
 
 ## Reconstruction of pancreatic islets for one image
 
-In this example we will reconstruct the density based on the point pattern density of the islet cells. We will start with estimating the parameters that we use for reconstruction afterwards.
+In this example we will reconstruct the islets based on the point pattern density of the islet cells. We will start with estimating the parameters that we use for reconstruction afterwards. For one image this can be illustrated as follows.
 
-The function `estimateReconstructionParametersSPE` returns two plots with the estimated parameters for each image. The parameter `bndw` is the bandwidth parameter that is used for estimating the intensity profile of the point pattern. The parameter `thres` is the estimated parameter for the density threshold for reconstruction. We subset 20 images to speed up computation.
+```{r}
+shapeIntensityImage(
+    spe,
+    marks = "cell_category",
+    image_col = "image_name",
+    image_id = "E04",
+    mark_select = "islet"
+)
+```
+
+We see the density (pixel) image on the left and a histogram of the intensity values on the right. The estimated threshold is roughly the mean between the two modes of the (truncated) pixel intensity distribution.
+
+This was done for one image. The function `estimateReconstructionParametersSPE` returns two plots with the estimated parameters for each image. The parameter `bndw` is the bandwidth parameter that is used for estimating the intensity profile of the point pattern. The parameter `thres` is the estimated parameter for the density threshold for reconstruction. We subset 20 images to speed up computation.
 
 ```{r}
 n <- estimateReconstructionParametersSPE(
@@ -85,29 +105,14 @@ n <- estimateReconstructionParametersSPE(
     plot_hist = TRUE
 )
 ```
+We will use the mean of the two estimated vectors as our parameters.
 
 ```{r}
 (thres_spe <- mean(n$thres))
 (bndw_spe <- mean(n$bndw))
 ```
 
-Using the `bdnw` parameter we can plot the density image and a distribution of the density values using the function `shapeIntensityImage`.
-
-```{r}
-shapeIntensityImage(
-    spe,
-    marks = "cell_category",
-    image_col = "image_name",
-    image_id = "E04",
-    mark_select = "islet",
-    bndw = bndw_spe
-)
-```
-
-The estimated threshold is roughly the mean between the two modes of the pixel density estimation.
-
-We then use the function `reconstructShapeDensity` to reconstruct the structure. The result is a `r BiocStyle::CRANpkg('sf')` polygon [@pebesmaSimpleFeaturesStandardized2018]. 
-
+We cam now use the function `reconstructShapeDensity` to segment the islet of one image. The result is a `r BiocStyle::CRANpkg('sf')` polygon [@pebesmaSimpleFeaturesStandardized2018]. 
 
 ```{r}
 islet <- reconstructShapeDensityImage(
@@ -131,7 +136,6 @@ plotSpots(
     sample_id = "image_number",
     in_tissue = NULL,
     y_reverse = FALSE,
-    point_size = 0.75
 ) +
     geom_sf(
         data = islet,
@@ -139,10 +143,10 @@ plotSpots(
         color = "darkblue",
         inherit.aes = FALSE, # this is important
         linewidth = 0.75
-    ) 
+    )
 ```
 
-The function `reconstructShapeDensityImage` can also estimate the reconstruction parameters internally.
+If no arguments are given, the function `reconstructShapeDensityImage` estimates the reconstruction parameters internally.
 
 ```{r}
 islet_2 <- reconstructShapeDensityImage(
@@ -163,7 +167,6 @@ plotSpots(
     sample_id = "image_number",
     in_tissue = NULL,
     y_reverse = FALSE,
-    point_size = 0.75
 ) +
     geom_sf(
         data = islet_2,
@@ -171,12 +174,12 @@ plotSpots(
         color = "darkblue",
         inherit.aes = FALSE,
         linewidth = 0.75
-    ) 
+    )
 ```
 
 ## Reconstruction of pancreatic islets for all images
 
-The function `reconstructShapeDensitySPE` reconstructs the islets for all images in the `spe` object.
+The function `reconstructShapeDensitySPE` reconstructs the islets for all images in the `spe` object. We use the estimated parameters from above.
 
 ```{r, eval=TRUE}
 all_islets <- reconstructShapeDensitySPE(
@@ -192,7 +195,7 @@ all_islets <- reconstructShapeDensitySPE(
 
 # Calculation of structure metrics
 
-We use the function `totalShapeMetrics` to calculate a set of metrics related to the shape of the islets.
+As we have islets for all images, we now use the function `totalShapeMetrics` to calculate a set of metrics related to the shape of the islets.
 
 ```{r}
 islet_shape_metrics <- totalShapeMetrics(all_islets)
@@ -254,6 +257,8 @@ autoplot(
     coord_fixed()
 ```
 
+We can use boxplots to investigate differences of shape metrics between patient stages.
+
 ```{r, fig.width=8, fig.height=6}
 all_islets |>
     sf::st_drop_geometry() |>
@@ -261,16 +266,15 @@ all_islets |>
     pivot_longer(-patient_stage) |>
     ggplot(aes(x = patient_stage, y = value, fill = patient_stage)) +
     geom_boxplot() +
-    facet_wrap( ~ name, scales = "free") +
+    facet_wrap(~name, scales = "free") +
     scale_fill_brewer(palette = "Dark2") +
     scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
     guides(fill = "none") +
     theme_bw()
 ```
 
-We can use boxplots to investigate differences of shape metrics between patient stages.
-
 ```{r sessionInfo}
 sessionInfo()
 ```
 
+# References

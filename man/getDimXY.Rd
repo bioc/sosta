@@ -19,9 +19,9 @@ Function to get the dimension based on dim of y axis
 }
 \examples{
 spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)
-pp <- SPE2ppp(spe,
+ppp <- SPE2ppp(spe,
     marks = "cell_category", image_col = "image_name",
     image_id = "E04"
 )
-getDimXY(pp, 500)
+getDimXY(ppp, 500)
 }
