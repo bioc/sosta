@@ -129,7 +129,8 @@ shapeIntensityImage <- function(
     p <- wrap_plots(den_im, den_hist, ncol = 2) +
         plot_annotation(
             title = paste0(image_col, ": ", image_id),
-            subtitle = paste0("bndw: ", round(res$bndw, 4), "; thres: ", round(thres, 4)),
+            subtitle = paste0("bndw: ", round(res$bndw, 4), "; estimated thres: ",
+                              round(thres, 4)),
             caption = paste0("Pixel image dimensions: ", res$dimyx[1],
                              "x", res$dimyx[2])
         )

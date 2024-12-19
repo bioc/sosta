@@ -247,7 +247,8 @@ findIntensityThreshold <- function(
                             dim) {
     # Input checking
     stopifnot("'ppp' must be an object of class 'ppp'" = inherits(ppp, "ppp"))
-    stopifnot("'dim' must be a single numeric value" = is.numeric(dim) && length(dim) == 1)
+    stopifnot("'dim' must be a single, positive, numeric value" = is.numeric(dim) &&
+                  length(dim) == 1 & dim > 0)
 
     if (!is.null(bndw)) {
         stopifnot("'bndw' must be a single numeric value" = is.numeric(bndw) && length(bndw) == 1)
@@ -298,8 +299,9 @@ findIntensityThreshold <- function(
     if (length(peaks) == 1) {
         thres <- peaks
     } else {
-        thres <- (peaks[order(peak_vals, decreasing = TRUE)[2]] -
-                      peaks[order(peak_vals, decreasing = TRUE)[1]]) / 2
+        thres <- (peaks[order(peaks, decreasing = FALSE)[2]] -
+                      peaks[order(peaks, decreasing = FALSE)[1]]) / 2 +
+            peaks[order(peaks, decreasing = FALSE)[1]]
     }
     return(thres)
 }

@@ -76,7 +76,6 @@ st_calculateCurvature <- function(sfPoly, smoothness = 5) {
     )
 
     smooth_poly <- sfPoly
-
     # Convert the smoothed data to a data frame
     smooth_df <- as.data.frame(st_coordinates(smooth_poly))
 
