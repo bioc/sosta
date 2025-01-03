@@ -1,6 +1,6 @@
 Package: sosta
 Title: A package for the analysis of anatomical tissue structures in spatial omics data
-Version: 0.99.2
+Version: 0.99.3
 Authors@R: c(
     person("Samuel", "Gunz", , "samuel.gunz@uzh.ch", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8909-0932")),
@@ -14,7 +14,7 @@ Description: `sosta` (Spatial Omics STructure Analysis) is a package for analyzi
     with other packages for the analysis of spatial (omics) data.
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.4.0)
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 URL: https://github.com/sgunz/sosta, https://sgunz.github.io/sosta/

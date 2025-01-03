@@ -4,11 +4,10 @@
 # Spatial Omic Structure Analysis
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 `sosta` (spatial omics structure analysis) is a framework to
-reconstruct, characterise and compare spatial structures from spatial
+reconstruct, characterize and compare spatial structures from spatial
 omics data.
 
 `sosta` builds on existing R packages for spatial analysis such as

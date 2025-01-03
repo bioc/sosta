@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{.intensityThreshold}
 \alias{.intensityThreshold}
-\title{Function to estimate the intensity threshold for the reconstruction of spatial strucutres}
+\title{Function to estimate the intensity threshold for the reconstruction of spatial structures}
 \usage{
 .intensityThreshold(density_image, steps = 250)
 }
@@ -17,5 +17,5 @@ Default is 250.}
 numeric; estimated threshold
 }
 \description{
-Function to estimate the intensity threshold for the reconstruction of spatial strucutres
+Function to estimate the intensity threshold for the reconstruction of spatial structures
 }

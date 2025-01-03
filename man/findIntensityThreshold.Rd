@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{findIntensityThreshold}
 \alias{findIntensityThreshold}
-\title{Estimate the intensity threshold for the reconstruction of spatial strucutres}
+\title{Estimate the intensity threshold for the reconstruction of spatial structures}
 \usage{
 findIntensityThreshold(ppp, mark_select = NULL, bndw = NULL, dim, steps = 250)
 }
@@ -26,7 +26,7 @@ Default is 250.}
 numeric; estimated intensity threshold
 }
 \description{
-Estimate the intensity threshold for the reconstruction of spatial strucutres
+Estimate the intensity threshold for the reconstruction of spatial structures
 }
 \examples{
 spe <- imcdatasets::Damond_2019_Pancreas("spe", full_dataset = FALSE)

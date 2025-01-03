@@ -1,5 +1,5 @@
 ---
-title: "Reconstrucion and analysis of pancreatic islets from IMC data"
+title: "Reconstruction and analysis of pancreatic islets from IMC data"
 author: 
   - name: "Samuel Gunz"
     affiliation:
@@ -14,9 +14,9 @@ package: "`r BiocStyle::Biocpkg('sosta')`"
 output:
   BiocStyle::html_document
 abstract: >
-  Reconstrucion and analysis of pancreatic islets from IMC data using the `sosta` package
+  Reconstruction and analysis of pancreatic islets from IMC data using the `sosta` package
 vignette: >
-  %\VignetteIndexEntry{Reconstrucion and analysis of pancreatic islets from IMC data}
+  %\VignetteIndexEntry{Reconstruction and analysis of pancreatic islets from IMC data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: sosta.bib

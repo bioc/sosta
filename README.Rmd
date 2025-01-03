@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-`sosta` (spatial omics structure analysis) is a framework to reconstruct, characterise and compare spatial structures from spatial omics data.
+`sosta` (spatial omics structure analysis) is a framework to reconstruct, characterize and compare spatial structures from spatial omics data.
 
 `sosta` builds on existing R packages for spatial analysis such as `spatstat`, `sf` and the [Bioconductor](https://bioconductor.org/) environment by integrating with packages `SpatialExperiment` and `SpatialFeatureExperiment`, which facilitates the implementation of additional custom metrics that fit the needs of users.
 

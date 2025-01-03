@@ -81,7 +81,7 @@ xyCoordinates <- function(inputMatrix) {
     return(as.matrix(indices))
 }
 
-#' Function to normalize coodinates between zero and one while keep scaling
+#' Function to normalize coordinates between zero and one while keep scaling
 #'
 #' @param coords matrix; matrix with coordinates
 #'
@@ -205,7 +205,7 @@ SPE2ppp <- function(spe,
 }
 
 
-#' Estimate the intensity threshold for the reconstruction of spatial strucutres
+#' Estimate the intensity threshold for the reconstruction of spatial structures
 #'
 #' @param ppp point pattern object of class `ppp`
 #' @param mark_select character; name of mark that is to be selected for the
@@ -291,7 +291,7 @@ findIntensityThreshold <- function(ppp, mark_select = NULL,
     return(list(den_im = den, bndw = bndw, dimyx = dimyx))
 }
 
-#' Function to estimate the intensity threshold for the reconstruction of spatial strucutres
+#' Function to estimate the intensity threshold for the reconstruction of spatial structures
 #'
 #' @param density_image real-valued pixel image; output from the function `.intensityImage`
 #' @param steps numeric; value used to filter the density estimates, where only

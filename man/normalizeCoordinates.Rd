@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{normalizeCoordinates}
 \alias{normalizeCoordinates}
-\title{Function to normalize coodinates between zero and one while keep scaling}
+\title{Function to normalize coordinates between zero and one while keep scaling}
 \usage{
 normalizeCoordinates(coords)
 }
@@ -13,7 +13,7 @@ normalizeCoordinates(coords)
 matrix; coordinates scaled between 0 and 1
 }
 \description{
-Function to normalize coodinates between zero and one while keep scaling
+Function to normalize coordinates between zero and one while keep scaling
 }
 \examples{
 matrix_R <- matrix(c(
