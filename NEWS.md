@@ -1,5 +1,9 @@
 # sosta 0.99.3
 
+* Set number of cores to 1 to pass build on Windows.
+
+# sosta 0.99.3
+
 Second round of [review](https://github.com/Bioconductor/Contributions/issues/3584#issuecomment-2568132189)
 
 * Changed required R version to >= 4.4.0

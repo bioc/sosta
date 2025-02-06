@@ -189,7 +189,7 @@ all_islets <- reconstructShapeDensitySPE(
     mark_select = "islet",
     bndw = bndw_spe,
     thres = thres_spe,
-    ncores = 2
+    ncores = 1
 )
 ```
 
