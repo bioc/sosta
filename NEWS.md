@@ -1,4 +1,4 @@
-# sosta 0.99.3
+# sosta 0.99.4
 
 * Set number of cores to 1 to pass build on Windows.
 
